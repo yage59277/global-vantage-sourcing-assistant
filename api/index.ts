@@ -1,9 +1,16 @@
-import type { Request, Response } from 'express';
-import app, { handleHealth } from '../server';
+import { getHealthStatus } from './lib/health';
 
-export default function handler(req: Request, res: Response) {
-  if (req.method === 'GET' && (!req.url || req.url === '/' || req.url === '/api')) {
-    return handleHealth(req, res);
+export default function handler(req: any, res: any) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Content-Type', 'application/json');
+
+  if (req.method === 'OPTIONS') {
+    res.statusCode = 204;
+    res.end();
+    return;
   }
-  return app(req, res);
+
+  res.statusCode = 200;
+  res.end(JSON.stringify(getHealthStatus()));
 }
