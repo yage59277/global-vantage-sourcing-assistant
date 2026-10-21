@@ -1,0 +1,6 @@
+{
+  "name": "Global Vantage Sourcing Assistant",
+  "description": "Transform messy buyer requests and procurement documents into verified, structured supplier-ready RFQs with AI parsing and multi-format exports.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

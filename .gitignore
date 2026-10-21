@@ -1,0 +1,36 @@
+# Node dependencies
+node_modules/
+
+# Production build outputs
+dist/
+build/
+coverage/
+
+# Vercel deployment cache and config
+.vercel/
+
+# Environment variables & secrets (CRITICAL: Never commit to Git)
+.env
+.env.*
+!.env.example
+
+# Customer documents & sample files (Prevent accidental leak of procurement data)
+*.xlsx
+*.xls
+*.docx
+*.doc
+*.pdf
+*.csv
+!public/**
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System & IDE artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
