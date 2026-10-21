@@ -2,9 +2,8 @@ import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { parseDocument, DocumentParseError } from './api/lib/documentParser';
-import { standardizeProcurement, fallbackHeuristicExtraction } from './api/lib/standardizer';
-import { getHealthStatus } from './api/lib/health';
+import { parseDocument } from './api/parse-document';
+import { standardizeProcurement, fallbackHeuristicExtraction } from './api/standardize';
 
 dotenv.config();
 
@@ -19,7 +18,13 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Health check handler
 const handleHealth = (req: Request, res: Response) => {
-  res.json(getHealthStatus());
+  res.json({
+    status: 'ok',
+    appName: 'Global Vantage Sourcing Assistant',
+    version: '1.0.0',
+    geminiConfigured: !!(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'MY_GEMINI_API_KEY'),
+    environment: process.env.VERCEL ? 'vercel-serverless' : 'local-node',
+  });
 };
 
 app.get('/api/health', handleHealth);
@@ -33,7 +38,7 @@ const handleParseDocument = async (req: Request, res: Response) => {
     const result = await parseDocument(fileName, fileData);
     return res.json(result);
   } catch (error: any) {
-    const statusCode = error instanceof DocumentParseError ? error.statusCode : 500;
+    const statusCode = error.statusCode || 500;
     return res.status(statusCode).json({
       success: false,
       error: error.message || 'Unknown error during document analysis',
